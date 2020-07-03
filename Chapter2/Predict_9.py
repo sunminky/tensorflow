@@ -93,3 +93,65 @@ if __name__ == '__main__':
     print("스코어 :",tree_rmse_scores)
     print("평균 :",tree_rmse_scores.mean())
     print("표준 편차 :",tree_rmse_scores.std())
+
+    ###하이퍼파라메터 튜닝###
+    ######그리드 탐색######
+    '''비교적 적은 수의 조합을 탐구할 때 추천'''
+    from sklearn.model_selection import GridSearchCV
+
+    parm_grid = [
+        {'n_estimators':[3,10,30], 'max_features':[2,4,6,8]},   #모형의 개수 [3,10,30], 다차원 독립 변수 중 선택할 차원의 수 [2,4,6,8]
+        {'bootstrap':[False], 'n_estimators':[3,10], 'max_features':[2,3,4]},   #데이터 중복사용 :False
+    ]
+    forest_reg = RandomForestRegressor()
+    grid_search = GridSearchCV(forest_reg, parm_grid, cv=5,
+                               scoring='neg_mean_squared_error',
+                               return_train_score=True)
+    grid_search.fit(housing_prepared, housing_labels)   # (3x4 + 2x3)x5개의 조합 시도 , 모형개수와 차원의 수와 kfold 세트 개수의 곱인 모든 조합을 시도함
+
+    print(grid_search.best_params_) #(탐색값 범위내에서) 획득한 최적의 하이퍼파라메터
+    print(grid_search.best_estimator_)  #직접 추정기에 접근해서 파라메터 관찰
+
+    ##각 파라메터별 평가점수 확인##
+    cvres = grid_search.cv_results_
+    for mean_score, params in zip(cvres["mean_test_score"], cvres["params"]):
+        print(np.sqrt(-mean_score), params)
+
+    ###랜덤탐색###
+    '''하이퍼파라메터의 탐색공간이 클 경우 사용'''
+    from sklearn.model_selection import RandomizedSearchCV
+
+    parm_random = [
+        {'n_estimators': list(range(1,50,5)), 'max_features': [2, 4, 6, 8, 10, 12]},
+        # 모형의 개수 [3,10,30], 다차원 독립 변수 중 선택할 차원의 수 [2,4,6,8]
+        {'bootstrap': [False], 'n_estimators': [3, 10], 'max_features': [2, 3, 4]},  # 데이터 중복사용 :False
+    ]
+    forest_reg = RandomForestRegressor()
+    random_search = RandomizedSearchCV(forest_reg, parm_random, cv=5,
+                               scoring='neg_mean_squared_error',
+                               return_train_score=True,n_iter=10)   #최대시도 횟수 10으로 제한
+    random_search.fit(housing_prepared, housing_labels)
+
+    print(random_search.best_params_)  # (탐색값 범위내에서) 획득한 최적의 하이퍼파라메터
+    print(random_search.best_estimator_)  # 직접 추정기에 접근해서 파라메터 관찰
+
+    ###최상의 모델 오차분석###
+    feature_importances = grid_search.best_estimator_.feature_importances_  #각 특성의 상대적인 중요도
+    print(feature_importances)
+
+    extra_attribs = ["rooms_per_hhold", "pop_per_hhold", "bedrooms_per_room"]
+    cat_one_hot_attribs = ['<1H OCEAN', 'INLAND', 'NEAR OCEAN', 'NEAR BAY', 'ISLAND']
+    attributes = list(num_attribs) + extra_attribs + cat_one_hot_attribs
+    print(sorted(zip(feature_importances, attributes), reverse=True))   #중요도와 그에 대응하는 특성 표시
+
+    ###시스템 평가###
+    final_model = grid_search.best_estimator_  #최적의 모델 선택
+    X_test = start_test_set.drop("median_house_value", axis=1)
+    y_test = start_test_set["median_house_value"].copy()
+
+    X_test_prepared = full_pipeline.fit_transform(X_test)
+
+    final_predictions = final_model.predict(X_test_prepared)
+    
+    final_mse = mean_squared_error(y_test, final_predictions)
+    final_rmse = np.sqrt(final_mse) #시스템 오차 출력

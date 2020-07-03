@@ -45,7 +45,7 @@ if __name__ == '__main__':
     from sklearn.model_selection import StratifiedShuffleSplit
 
     split = StratifiedShuffleSplit(n_splits=1, test_size=0.5,
-                                   random_state=42)  # 세트의 개수 1개(K폴드 알고리즘), 나누는 비율 0.5, 시드값 42
+                                   random_state=42)  # 세트의 개수 1개(1개 배열 반환), 나누는 비율 0.5, 시드값 42
     print("----------------------------------------")
     for train_index, test_index in split.split(data, data["c2"]):   #c2행의 비율을 고려해서 나눔
         a = data.loc[train_index]  # 인덱스를 기준으로 행을 읽기, iloc은 행번호를 기준으로 행을 읽음
