@@ -13,7 +13,7 @@ print(data_frame.tail(3))   #뒤에서 3개의 데이터를 보여줌
 print()
 print("name 타입 :",type(data_frame.name))    #각 칼럼들은 시리즈 타입
 print("age 타입 :",type(data_frame.age))      #각 칼럼들은 시리즈 타입
-print("job 타입 :",type(data_frame.job))      #각 칼럼들은 시리즈 타입
+print("job 타입 :",type(data_frame["job"]))      #각 칼럼들은 시리즈 타입
 print()
 
 s1 = pd.core.series.Series([1,2,3]) #시리즈 만들기, 매개변수로 리스트가 들어감
