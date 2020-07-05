@@ -21,7 +21,7 @@ print()
 df["age"] = df["year"].apply(get_age, current_year=2020)    #apply로 적용하는 함수에 매개변수 전달
 print(df)
 print()
-df["introduce"] = df.apply(yearNage, axis=1)    #매개변수로 행을 전달, axis=0은 열, axis=1은 행
+df["introduce"] = df.apply(yearNage, axis=1)    #매개변수로 행을 전달, axis=1은 열, axis=0은 행
 print(df)
 print()
 
