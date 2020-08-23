@@ -270,4 +270,10 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# Data file
+*.pkl
+*.npz
+*.npy
+*.tgz
+
 # End of https://www.toptal.com/developers/gitignore/api/windows,python,pycharm,virtualenv
