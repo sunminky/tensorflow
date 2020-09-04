@@ -10,7 +10,7 @@ def evaluation(sgd_clf):
 def confusionMatrix(sgd_clf):
     from sklearn.model_selection import cross_val_predict
     
-    y_train_ped = cross_val_predict(sgd_clf, Chapter3.BinaryClassifier_2.X_train,   #k폴드 교차 검증수행, 각 테스트 폴드에서 얻은 예측 반환
+    y_train_ped = cross_val_predict(sgd_clf, Chapter3.BinaryClassifier_2.X_train,   #각 테스트 폴드에서 얻은 예측 반환
                                     Chapter3.BinaryClassifier_2.y_train_5, cv=3)
 
     from sklearn.metrics import confusion_matrix
@@ -21,7 +21,7 @@ def confusionMatrix(sgd_clf):
 def precisionANDrecall(sgd_clf):
     from sklearn.model_selection import cross_val_predict
 
-    y_train_ped = cross_val_predict(sgd_clf, Chapter3.BinaryClassifier_2.X_train,  # k폴드 교차 검증수행, 각 테스트 폴드에서 얻은 예측 반환
+    y_train_ped = cross_val_predict(sgd_clf, Chapter3.BinaryClassifier_2.X_train,  #각 테스트 폴드에서 얻은 예측 반환
                                     Chapter3.BinaryClassifier_2.y_train_5, cv=3)
 
     from sklearn.metrics import precision_score, recall_score
