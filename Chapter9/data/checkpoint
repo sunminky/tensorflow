@@ -1,0 +1,3 @@
+model_checkpoint_path: "final_model_save.ckpt"
+all_model_checkpoint_paths: "model_save.ckpt"
+all_model_checkpoint_paths: "final_model_save.ckpt"
