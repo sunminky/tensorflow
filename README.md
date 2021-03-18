@@ -4,4 +4,4 @@
 
 ## 주피터노트북 주소↓↓↓
 
-https://sunbuntu.duckdns.org:8000/tree/HandsOnML/
+https://jupyter.sunbuntu.duckdns.org/tree/HandsOnML
